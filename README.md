@@ -1,16 +1,16 @@
-# homebridge-mihome
+# homebridge-mihomegateway
 
 Energenie MiHome gateway plugin for [Homebridge](https://github.com/nfarina/homebridge).
 
 # Installation
 
 1. Install Homebridge using: `npm install -g homebridge`
-2. Install this plugin using: `npm install -g homebridge-mihome`
+2. Install this plugin using: `npm install -g homebridge-mihomegatewat`
 3. Update your configuration file. See the sample below.
 
 # Updating
 
-- `npm update -g homebridge-mihome`
+- `npm update -g homebridge-mihomegateway`
 
 # Configuration
 
@@ -18,7 +18,7 @@ Energenie MiHome gateway plugin for [Homebridge](https://github.com/nfarina/home
 
 ```json
 "accessories": [{
-    "accessory": "MiHome",
+    "accessory": "MiHomeGateway",
     "name": "",
     "username": "",
     "api_key": "",
