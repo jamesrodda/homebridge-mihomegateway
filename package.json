@@ -1,5 +1,5 @@
 {
-  "name": "homebridge-mihome",
+  "name": "homebridge-mihomegateway",
   "version": "0.0.1",
   "description": "MiHome plugin for homebridge: https://github.com/nfarina/homebridge",
   "license": "ISC",
@@ -8,10 +8,10 @@
   ],
   "repository": {
     "type": "git",
-    "url": "git://github.com/jamesrodda/homebridge-mihome.git"
+    "url": "git://github.com/jamesrodda/homebridge-mihomegateway.git"
   },
   "bugs": {
-    "url": "http://github.com/jamesrodda/homebridge-mihome/issues"
+    "url": "http://github.com/jamesrodda/homebridge-mihomegateway/issues"
   },
   "engines": {
     "node": ">=0.12.0",
@@ -20,7 +20,7 @@
   "dependencies": {
     "request": "^2.65.0"
   },
-  "homepage": "https://github.com/jamesrodda/homebridge-mihome#readme",
+  "homepage": "https://github.com/jamesrodda/homebridge-mihomegateway#readme",
   "main": "index.js",
   "author": "James Rodda <james@rodda.me> (http://rodda.me)"
 }
