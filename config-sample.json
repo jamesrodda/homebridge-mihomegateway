@@ -1,0 +1,20 @@
+{
+    "bridge": {
+        "name": "Homebridge",
+        "username": "CC:23:4D:E3:CE:30",
+        "port": 51826,
+        "pin": "031-45-155"
+    },
+
+    "description": "This is an example configuration file with one fake accessory and one fake platform.",
+
+    "accessories": [
+        {
+            "accessory": "MiHome",
+            "name": "",
+            "username": "",
+            "api_key": "",
+            "device_id": ""
+        }
+    ]
+}
