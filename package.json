@@ -8,10 +8,10 @@
   ],
   "repository": {
     "type": "git",
-    "url": "git://github.com/example/homebridge-lockitron.git"
+    "url": "git://github.com/jamesrodda/homebridge-mihome.git"
   },
   "bugs": {
-    "url": "http://github.com/example/homebridge-lockitron/issues"
+    "url": "http://github.com/jamesrodda/homebridge-mihome/issues"
   },
   "engines": {
     "node": ">=0.12.0",
@@ -19,5 +19,8 @@
   },
   "dependencies": {
     "request": "^2.65.0"
-  }
+  },
+  "homepage": "https://github.com/jamesrodda/homebridge-mihome#readme",
+  "main": "index.js",
+  "author": "James Rodda <james@rodda.me> (http://rodda.me)"
 }
