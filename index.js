@@ -5,10 +5,10 @@ module.exports = function(homebridge) {
   Service = homebridge.hap.Service;
   Characteristic = homebridge.hap.Characteristic;
   
-  homebridge.registerAccessory("homebridge-mihome", "MiHome", MiHomeAccessory);
+  homebridge.registerAccessory("homebridge-mihomegateway", "MiHomeGateway", MiHomeGatewayAccessory);
 }
 
-function MiHomeAccessory(log, config) {
+function MiHomeGatewayAccessory(log, config) {
   this.log = log;
   this.name = config["name"];
   this.username = config["username"];
@@ -22,7 +22,7 @@ function MiHomeAccessory(log, config) {
     .on('set', this.setState.bind(this));
 }
   
-MiHomeAccessory.prototype.setState = function(state, callback) {
+MiHomeGatewayAccessory.prototype.setState = function(state, callback) {
     var endpoint = state ? "power_on" : "power_off";
   request.post({
     url: "https://mihome4u.co.uk/api/v1/subdevices/" + endpoint,
@@ -46,6 +46,6 @@ MiHomeAccessory.prototype.setState = function(state, callback) {
   }.bind(this));
 }
 
-MiHomeAccessory.prototype.getServices = function() {
+MiHomeGatewayAccessory.prototype.getServices = function() {
   return [this.service];
 }

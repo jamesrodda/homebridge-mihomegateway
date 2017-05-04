@@ -10,7 +10,7 @@
 
     "accessories": [
         {
-            "accessory": "MiHome",
+            "accessory": "MiHomeGatewayAccessory",
             "name": "",
             "username": "",
             "api_key": "",
