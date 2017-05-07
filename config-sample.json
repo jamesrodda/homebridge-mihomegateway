@@ -13,6 +13,7 @@
             "accessory": "MiHomeGateway",
             "name": "",
             "username": "",
+            "password": "",
             "api_key": "",
             "device_id": ""
         }
