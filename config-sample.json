@@ -1,6 +1,6 @@
 {
     "bridge": {
-        "name": "Homebridge",
+        "name": "Homebridge-dev",
         "username": "CC:23:4D:E3:CE:30",
         "port": 51826,
         "pin": "031-45-155"
@@ -10,7 +10,7 @@
 
     "accessories": [
         {
-            "accessory": "MiHomeGatewayAccessory",
+            "accessory": "MiHomeGateway",
             "name": "",
             "username": "",
             "api_key": "",
