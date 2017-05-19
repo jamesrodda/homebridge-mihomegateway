@@ -21,24 +21,24 @@ This will all be automated in upcoming releases but for now a bit of manual work
 ## Sample Configuration
 
 ```json
-"accessories": [{
-    "accessory": "MiHomeGateway",
+"platforms": [{
+    "platform": "MiHomeGateway",
     "name": "",
     "username": "",
     "password": "",
-    "api_key": "",
-    "device_id": ""
+    "baseUrl": ""
 }]
 ```
 - `accessory` - must be set to **MiHomeGateway**
-- `name` - the name of the accessory to control
+- `name` - not currently used but set to a friendly label for the MiHome bridge
 - `username` - call the [register user service](https://mihome4u.co.uk/docs/api-documentation/users-api/sign-up-a-new-user) to create a new api user
-- `password` - either provide the password you used to register with or provide the api_key explicitly below. Your password is only used for one initial authentication call. Subsequent calls will use the api key obtained during authentication.
-- `api_key` - call the [user profile service](https://mihome4u.co.uk/docs/api-documentation/users-api/fetch-user-profile) using the credentials you provided previously to get an api key
-- `device_id` - call the [subdevices service](https://mihome4u.co.uk/docs/api-documentation/subdevices-api/list-all-subdevices) to get the device id for the device you wish to control
-
+- `password` - the password you used to register with. Your password is only used for one initial authentication call. Subsequent calls will use the api key obtained during authentication.
+- `baseUrl` - [optional] an override for the MiHome API URL
 
 ## TODO
-- List all subdevices on gateway
-- Convert to a platform
+- Add additional device types (currently only supports light switches)
 - Automate registration
+- Extract MiHome API calls into separate library
+
+## Credits
+- Adrian Rudman for [homebridge-platform-wemo](https://github.com/rudders/homebridge-platform-wemo) which I based this plugin on

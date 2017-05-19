@@ -6,16 +6,15 @@
         "pin": "031-45-155"
     },
 
-    "description": "This is an example configuration file with one fake accessory and one fake platform.",
+    "description": "This is an example configuration file showing possible configuration entries for mihomegateway.",
 
-    "accessories": [
+    "platforms": [
         {
-            "accessory": "MiHomeGateway",
-            "name": "",
+            "platform": "MiHomeGateway",
+            "name": "MiHome Gateway",
             "username": "",
             "password": "",
-            "api_key": "",
-            "device_id": ""
+            "api_key": ""
         }
     ]
 }
