@@ -89,6 +89,8 @@ MiHomeGateway.prototype.addAccessory = function (device) {
       break;
     case "relay":
       serviceType = Service.Switch;
+    case "control":
+      serviceType = Service.Switch;
     break;
     default:
       this.log("Not Supported: %s [%s]", device.label, device.device_type);
