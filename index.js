@@ -85,11 +85,11 @@ MiHomeGateway.prototype.addAccessory = function (device) {
 
   switch (device.device_type) {
     case "light":
-      serviceType = Service.Switch;
-      break;
     case "relay":
-      serviceType = Service.Switch;
     case "control":
+      serviceType = Service.Switch;
+    break;
+    case "legacy":
       serviceType = Service.Switch;
     break;
     default:
