@@ -84,12 +84,17 @@ MiHomeGateway.prototype.addAccessory = function (device) {
   var serviceType;
 
   switch (device.device_type) {
-    case "light":
-    case "relay":
+    // A monitor and control radio device
     case "control":
       serviceType = Service.Switch;
     break;
+    // A legacy control-only device (plug-in)
     case "legacy":
+      serviceType = Service.Switch;
+    break;
+    // A legacy control-only device (light switch / wall mounted relay)
+    case "light":
+    case "relay":
       serviceType = Service.Switch;
     break;
     default:
