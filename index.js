@@ -245,7 +245,8 @@ function MiHomeAccessory(log, accessory, device, platform) {
   this.updateReachability(true);
 
   this.accessory.getService(Service.AccessoryInformation)
-    .setCharacteristic(Characteristic.Manufacturer, "Energenie MiHome");
+    .setCharacteristic(Characteristic.Manufacturer, "Energenie MiHome")
+    .setCharacteristic(Characteristic.Model, device.device_type);
 
   this.accessory.on('identify', function (paired, callback) {
     self.log("%s - identify", self.accessory.displayName);
