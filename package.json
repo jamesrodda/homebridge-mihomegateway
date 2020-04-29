@@ -1,6 +1,6 @@
 {
   "name": "homebridge-mihomegateway",
-  "version": "1.0.1",
+  "version": "1.1.0",
   "description": "MiHome plugin for homebridge: https://github.com/nfarina/homebridge",
   "license": "MIT",
   "keywords": [

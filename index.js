@@ -8,7 +8,7 @@ module.exports = function (homebridge) {
   UUIDGen = homebridge.hap.uuid;
 
   homebridge.registerPlatform("homebridge-mihomegateway", "MiHomeGateway", MiHomeGateway, true);
-}
+};
 
 function MiHomeGateway(log, config, api) {
   if (!config) {
@@ -20,11 +20,11 @@ function MiHomeGateway(log, config, api) {
   this.log = log;
   this.log("begin constructor");
 
-  this.name = config["name"];
-  this.username = config["username"];
+  this.name = config.name;
+  this.username = config.username;
   this.accessToken = "";
 
-  this.baseUrl = config["baseUrl"] || "https://mihome4u.co.uk/api/v1/";
+  this.baseUrl = config.baseUrl || "https://mihome4u.co.uk/api/v1/";
 
   this.api = api;
   this.accessories = {};
@@ -38,7 +38,7 @@ function MiHomeGateway(log, config, api) {
 
 MiHomeGateway.prototype.discoverDevices = function () {
   this.log("finding devices");
-  this.log("username: %s, password: %s", this.username, this.accessToken)
+  this.log("username: %s, password: %s", this.username, this.accessToken);
   request.post({
     url: this.baseUrl + "subdevices/list",
     auth: {
@@ -61,7 +61,7 @@ MiHomeGateway.prototype.discoverDevices = function () {
     }
     this.log("Error '%s' finding devices. Response: %s", err, body);
   }.bind(this));
-}
+};
 
 MiHomeGateway.prototype.addDevice = function (device) {
   this.log("adding %s:%s", device.id, device.label);
@@ -78,7 +78,7 @@ MiHomeGateway.prototype.addDevice = function (device) {
   } else {
     this.accessories[uuid] = new MiHomeAccessory(this.log, accessory, device, this);
   }
-}
+};
 
 MiHomeGateway.prototype.addAccessory = function (device) {
   var serviceType;
@@ -113,7 +113,7 @@ MiHomeGateway.prototype.addAccessory = function (device) {
 
   this.accessories[accessory.UUID] = new MiHomeAccessory(this.log, accessory, device, this);
   this.api.registerPlatformAccessories("homebridge-mihomegateway", "MiHomeGateway", [accessory]);
-}
+};
 
 MiHomeGateway.prototype.removeAccessory = function (accessory) {
   this.log("Removing accessory: %s", accessory.displayName);
@@ -123,12 +123,11 @@ MiHomeGateway.prototype.removeAccessory = function (accessory) {
   }
 
   this.api.unregisterPlatformAccessories("homebridge-mihomegateway", "MiHomeGateway", [accessory]);
-}
+};
 
 MiHomeGateway.prototype.configureAccessory = function (accessory) {
-  accessory.updateReachability(true);
   this.accessories[accessory.UUID] = accessory;
-}
+};
 
 MiHomeGateway.prototype.configurationRequestHandler = function (context, request, callback) {
   var self = this;
@@ -141,19 +140,19 @@ MiHomeGateway.prototype.configurationRequestHandler = function (context, request
   var sortAccessories = function () {
     context.sortedAccessories = Object.keys(self.accessories).map(
       function (k) {
-        return this[k] instanceof Accessory ? this[k] : this[k].accessory
+        return this[k] instanceof Accessory ? this[k] : this[k].accessory;
       },
       self.accessories
     ).sort(function (a, b) {
       if (a.displayName < b.displayName) return -1;
       if (a.displayName > b.displayName) return 1;
-      return 0
+      return 0;
     });
 
     return Object.keys(context.sortedAccessories).map(function (k) {
-      return this[k].displayName
+      return this[k].displayName;
     }, context.sortedAccessories);
-  }
+  };
 
   switch (context.onScreen) {
     case "DoRemove":
@@ -167,7 +166,7 @@ MiHomeGateway.prototype.configurationRequestHandler = function (context, request
           "interface": "instruction",
           "title": "Finished",
           "detail": "Accessory removal was successful."
-        }
+        };
 
         context.onScreen = null;
         callback(respDict);
@@ -178,6 +177,7 @@ MiHomeGateway.prototype.configurationRequestHandler = function (context, request
       break;
     case "Menu":
       context.onScreen = "Remove";
+      break;
     case "Remove":
       respDict = {
         "type": "Interface",
@@ -185,7 +185,7 @@ MiHomeGateway.prototype.configurationRequestHandler = function (context, request
         "title": "Select accessory to " + context.onScreen.toLowerCase(),
         "allowMultipleSelection": context.onScreen == "Remove",
         "items": sortAccessories()
-      }
+      };
 
       context.onScreen = "Do" + context.onScreen;
       callback(respDict);
@@ -201,13 +201,13 @@ MiHomeGateway.prototype.configurationRequestHandler = function (context, request
           "title": "Select option",
           "allowMultipleSelection": false,
           "items": ["Remove Accessory"]
-        }
+        };
 
         context.onScreen = "Menu";
         callback(respDict);
       }
   }
-}
+};
 
 MiHomeGateway.prototype.authenticate = function (config, callback) {
   callback = callback || function () {};
@@ -216,7 +216,7 @@ MiHomeGateway.prototype.authenticate = function (config, callback) {
     url: this.baseUrl + "users/profile",
     auth: {
       user: this.username,
-      pass: config["password"],
+      pass: config.password,
       sendImmediately: true
     }
   }, function (err, response, body) {
@@ -231,7 +231,7 @@ MiHomeGateway.prototype.authenticate = function (config, callback) {
       throw "Authentication failed. See log for details.";
     }
   }.bind(this));
-}
+};
 
 function MiHomeAccessory(log, accessory, device, platform) {
   var self = this;
@@ -242,7 +242,6 @@ function MiHomeAccessory(log, accessory, device, platform) {
   this.platform = platform;
 
   this.setupDevice(device);
-  this.updateReachability(true);
 
   this.accessory.getService(Service.AccessoryInformation)
     .setCharacteristic(Characteristic.Manufacturer, "Energenie MiHome")
@@ -259,19 +258,15 @@ function MiHomeAccessory(log, accessory, device, platform) {
 
 MiHomeAccessory.prototype.setupDevice = function (device) {
   this.device = device;
-}
+};
 
 MiHomeAccessory.prototype.observeDevice = function (device) {
 
-}
-
-MiHomeAccessory.prototype.updateReachability = function (reachable) {
-  this.accessory.updateReachability(reachable);
-}
+};
 
 MiHomeAccessory.prototype.addEventHandlers = function () {
   this.addEventHandler(Service.Switch, Characteristic.On);
-}
+};
 
 MiHomeAccessory.prototype.addEventHandler = function (serviceName, characteristic) {
   serviceName = serviceName || Service.Switch;
@@ -295,7 +290,7 @@ MiHomeAccessory.prototype.addEventHandler = function (serviceName, characteristi
     default:
       this.log("Unsupported characteristic: %s", characteristic);
   }
-}
+};
 
 MiHomeAccessory.prototype.setSwitchState = function (state, callback) {
   var value = state | 0;
@@ -327,7 +322,7 @@ MiHomeAccessory.prototype.setSwitchState = function (state, callback) {
   } else {
     callback(null);
   }
-}
+};
 
 MiHomeAccessory.prototype.updateSwitchState = function (state) {
   state = state | 0;
@@ -343,4 +338,4 @@ MiHomeAccessory.prototype.updateSwitchState = function (state) {
   }
 
   return value;
-}
+};
