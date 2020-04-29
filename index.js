@@ -84,12 +84,17 @@ MiHomeGateway.prototype.addAccessory = function (device) {
   var serviceType;
 
   switch (device.device_type) {
-    case "light":
-      serviceType = Service.Switch;
-      break;
-    case "relay":
-      serviceType = Service.Switch;
+    // A monitor and control radio device
     case "control":
+      serviceType = Service.Switch;
+    break;
+    // A legacy control-only device (plug-in)
+    case "legacy":
+      serviceType = Service.Switch;
+    break;
+    // A legacy control-only device (light switch / wall mounted relay)
+    case "light":
+    case "relay":
       serviceType = Service.Switch;
     break;
     default:
@@ -240,7 +245,8 @@ function MiHomeAccessory(log, accessory, device, platform) {
   this.updateReachability(true);
 
   this.accessory.getService(Service.AccessoryInformation)
-    .setCharacteristic(Characteristic.Manufacturer, "Energenie MiHome");
+    .setCharacteristic(Characteristic.Manufacturer, "Energenie MiHome")
+    .setCharacteristic(Characteristic.Model, device.device_type);
 
   this.accessory.on('identify', function (paired, callback) {
     self.log("%s - identify", self.accessory.displayName);
