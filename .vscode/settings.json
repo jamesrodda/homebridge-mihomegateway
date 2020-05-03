@@ -1,0 +1,9 @@
+{
+  "editor.codeActionsOnSave": {
+    "source.fixAll.eslint": true
+  },
+  "editor.rulers": [ 140 ],
+  "eslint.enable": true,
+"editor.detectIndentation": false,
+"editor.tabSize": 2
+}

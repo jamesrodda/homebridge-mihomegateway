@@ -1,0 +1,26 @@
+{
+  "pluginAlias": "MiHomeGateway",
+  "pluginType": "platform",
+  "singular": true,
+  "schema": {
+    "type": "object",
+    "properties": {
+      "baseUrl": {
+        "title": "BaseUrl",
+        "type": "string",
+        "required": true,
+        "default": "https://mihome4u.co.uk/api/v1/"
+      },
+      "username": {
+        "title": "Username",
+        "type": "string",
+        "required": true
+      },
+      "password": {
+        "title": "Password",
+        "type": "string",
+        "required": true
+      }
+    }
+  }
+}
