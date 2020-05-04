@@ -51,8 +51,6 @@ export class SwitchAccessory extends MiHomePlatformAccessory {
    * These are sent when the user changes the state of an accessory, for example, turning on a Light bulb.
    */
   setOn(value: CharacteristicValue, callback: CharacteristicSetCallback) {
-
-    // implement your own code to turn your device on/off
     this.states.On = value as boolean;
 
     this.platform.log.debug('Set Characteristic On ->', value);
@@ -79,16 +77,7 @@ export class SwitchAccessory extends MiHomePlatformAccessory {
 
   /**
    * Handle the "GET" requests from HomeKit
-   * These are sent when HomeKit wants to know the current state of the accessory, for example, checking if a Light bulb is on.
-   * 
-   * GET requests should return as fast as possbile. A long delay here will result in
-   * HomeKit being unresponsive and a bad user experience in general.
-   * 
-   * If your device takes time to respond you should update the status of your device
-   * asynchronously instead using the `updateCharacteristic` method instead.
-   
-  * @example
-  * this.service.updateCharacteristic(this.platform.Characteristic.On, true)
+   * These are sent when HomeKit wants to know the current state of the accessory.
   */
   getOn(callback: CharacteristicGetCallback) {
 
@@ -97,16 +86,14 @@ export class SwitchAccessory extends MiHomePlatformAccessory {
     // value is not reported by the API. Investigations ongoing to find a solution.
     this.platform.EnergenieApi.getSubdeviceInfo(this.accessory.context.device.id)
       .then(deviceInfo => {
-        const isOn = deviceInfo.power_state === 1;
+        this.states.On = deviceInfo.power_state === 1;
 
-        this.states.On = isOn;
+        this.platform.log.debug('Get Characteristic On ->', this.states.On);
 
-        this.platform.log.debug('Get Characteristic On ->', isOn);
-
-        // you must call the callback function
-        // the first argument should be null if there were no errors
-        // the second argument should be the value to return
-        callback(null, isOn);
+        callback(null, this.states.On);
+      })
+      .catch(err => {
+        callback(err);
       });
   }
 }

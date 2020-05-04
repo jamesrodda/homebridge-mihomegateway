@@ -1,6 +1,6 @@
 {
   "name": "homebridge-mihomegateway",
-  "displayName": "Homebridge MiHomeGateway",
+  "displayName": "Homebridge MiHome Gateway",
   "version": "2.0.0",
   "description": "MiHome plugin for homebridge: https://github.com/nfarina/homebridge",
   "license": "ISC",
