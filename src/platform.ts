@@ -107,15 +107,20 @@ export class MiHomeGateway implements DynamicPlatformPlugin {
   private createAccessoryHandler(accessory: PlatformAccessory): MiHomePlatformAccessory | null {
     const device: SubDevice = accessory.context.device;
 
-    switch (device.device_type) {
-      case DeviceType.CONTROL:
-      case DeviceType.LEGACY:
-      case DeviceType.LIGHT:
-      case DeviceType.RELAY:
-        return new SwitchAccessory(this, accessory);
-      default:
-        this.log.warn('Accessory type not supported: %s [%s]', device.label, device.device_type);
-        return null;
+    try {
+      switch (device.device_type) {
+        case DeviceType.CONTROL:
+        case DeviceType.LEGACY:
+        case DeviceType.LIGHT:
+        case DeviceType.RELAY:
+          return new SwitchAccessory(this, accessory);
+        default:
+          this.log.warn('Accessory type not supported: %s [%s]', device.label, device.device_type);
+          return null;
+      }
+    } catch (err) {
+      this.log.error('Error creating accessory handler', err);
+      return null;
     }
   }
 }
