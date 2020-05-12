@@ -1,5 +1,7 @@
 # homebridge-mihomegateway
 
+[![verified-by-homebridge](https://badgen.net/badge/homebridge/verified/purple)](https://github.com/homebridge/homebridge/wiki/Verified-Plugins)
+
 Energenie MiHome gateway plugin for [Homebridge](https://github.com/nfarina/homebridge).
 
 # Installation
