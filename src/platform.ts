@@ -142,7 +142,11 @@ export class MiHomeGateway implements DynamicPlatformPlugin {
     }
   }
 
+  /**
+   * Check if object is null, empty, or undefined.
+   * @param obj Object.
+   */
   private isNullOrEmpty<T>(obj: T): boolean {
-    return obj === null || Object.keys(obj).length === 0;
+    return obj === null || obj === undefined || Object.keys(obj).length === 0;
   }
 }
