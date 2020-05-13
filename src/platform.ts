@@ -76,9 +76,22 @@ export class MiHomeGateway implements DynamicPlatformPlugin {
         // number or MAC address
         const uuid = this.api.hap.uuid.generate(device.id.toString());
 
-        // check that the device has not already been registered by checking the
-        // cached devices we stored in the `configureAccessory` method above
-        if (!this.accessories.find(accessory => accessory.UUID === uuid)) {
+        // see if an accessory with the same uuid has already been registered and restored from
+        // the cached devices we stored in the `configureAccessory` method above
+        const existingAccessory = this.accessories.find(accessory => accessory.UUID === uuid);
+
+        if (existingAccessory) {
+          this.log.debug('Found existing accessory:', device.label);
+
+          if (this.isNullOrEmpty(existingAccessory.context.device)) {
+            this.log.debug('Device context was null, restoring');
+
+            existingAccessory.context.device = device;
+          }
+
+          this.api.updatePlatformAccessories([existingAccessory]);
+
+        } else {
           this.log.debug('Registering new accessory:', device.label);
 
           // create a new accessory
@@ -107,6 +120,11 @@ export class MiHomeGateway implements DynamicPlatformPlugin {
   private createAccessoryHandler(accessory: PlatformAccessory): MiHomePlatformAccessory | null {
     const device: SubDevice = accessory.context.device;
 
+    if (this.isNullOrEmpty(device)) {
+      this.log.warn('Device context is null, unable to create accessory');
+      return null;
+    }
+
     try {
       switch (device.device_type) {
         case DeviceType.CONTROL:
@@ -122,5 +140,9 @@ export class MiHomeGateway implements DynamicPlatformPlugin {
       this.log.error('Error creating accessory handler', err);
       return null;
     }
+  }
+
+  private isNullOrEmpty<T>(obj: T): boolean {
+    return obj === null || Object.keys(obj).length === 0;
   }
 }
