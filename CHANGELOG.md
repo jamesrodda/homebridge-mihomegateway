@@ -6,9 +6,15 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [2.0.3] - 2020-05-13
+### Fixed
+- Markdown typo in changelog
+- Handle undefined device
+
 ## [2.0.2] - 2020-05-13
 ### Added
 - This project is now a Homebridge verified plugin!
+
 ### Fixed
 - Handle case where accessory.context.device is missing
 
