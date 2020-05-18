@@ -1,6 +1,6 @@
 import type { PlatformAccessory } from 'homebridge';
 
-import { MiHomeGatewayPlatform } from './platform';
+import { MiHomeGatewayPlatform } from '../platform';
 
 /**
  * Platform Accessory

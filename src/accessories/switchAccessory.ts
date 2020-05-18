@@ -1,4 +1,4 @@
-import { MiHomeGatewayPlatform } from './platform';
+import { MiHomeGatewayPlatform } from '../platform';
 import {
   PlatformAccessory,
   CharacteristicEventTypes,
