@@ -1,24 +1,25 @@
 import { APIEvent } from 'homebridge';
 import type { API, DynamicPlatformPlugin, Logger, PlatformAccessory, PlatformConfig } from 'homebridge';
 
-import { PLATFORM_NAME, PLUGIN_NAME } from './settings';
-import { SubDevice, DeviceType } from './models';
-import { SwitchAccessory } from './switchAccessory';
-import { EnergenieApi } from './energenieApi';
-import { MiHomePlatformAccessory } from './platformAccessory';
+import { PLATFORM_NAME, PLUGIN_NAME, MIHOME_API_BASE_URL } from './settings';
+import { SwitchAccessory } from './accessories/switchAccessory';
+
+import { DeviceType } from './energenieApi/models';
+import { EnergenieApi } from './energenieApi/energenieApi';
 
 /**
- * HomebridgePlatform
+ * MiHome Gateway Platform
  * This class is the main constructor for your plugin, this is where you should
  * parse the user config and discover/register accessories with Homebridge.
  */
 export class MiHomeGatewayPlatform implements DynamicPlatformPlugin {
   public readonly Service = this.api.hap.Service;
   public readonly Characteristic = this.api.hap.Characteristic;
-  public readonly EnergenieApi: EnergenieApi;
 
   // this is used to track restored cached accessories
   public readonly accessories: PlatformAccessory[] = [];
+
+  public readonly EnergenieApi: EnergenieApi;
 
   constructor(
     public readonly log: Logger,
@@ -27,7 +28,23 @@ export class MiHomeGatewayPlatform implements DynamicPlatformPlugin {
   ) {
     this.log.debug('Finished initializing platform:', this.config.name);
 
-    this.EnergenieApi = new EnergenieApi(log, config.username, config.password, config.baseUrl || 'https://mihome4u.co.uk/api/v1/');
+    if (!this.config.username) {
+      this.log.error('Username not set.');
+    }
+
+    if (!this.config.password && !this.config.token) {
+      if (this.config.token) {
+        this.config.password = this.config.token;
+      } else {
+        this.log.error('Password or token not set.');
+      }
+    }
+
+    if (!this.config.baseUrl) {
+      this.config.baseUrl = MIHOME_API_BASE_URL;
+    }
+
+    this.EnergenieApi = new EnergenieApi(this.log, this.config.username, this.config.password, this.config.baseUrl);
 
     // When this event is fired it means Homebridge has restored all cached accessories from disk.
     // Dynamic Platform plugins should only register new accessories after this event was fired,
@@ -47,8 +64,6 @@ export class MiHomeGatewayPlatform implements DynamicPlatformPlugin {
   configureAccessory(accessory: PlatformAccessory) {
     this.log.debug('Restoring accessory from cache:', accessory.displayName);
 
-    this.createAccessoryHandler(accessory);
-
     // add the restored accessory to the accessories cache so we can track if it has already been registered
     this.accessories.push(accessory);
   }
@@ -57,11 +72,11 @@ export class MiHomeGatewayPlatform implements DynamicPlatformPlugin {
    * Calls the Energenie API to find devices registered
    */
   async discoverDevices(): Promise<void> {
+    
     try {
       await this.EnergenieApi.auth();
-    } catch (err) {
-      this.log.error('Error authenticating', err);
-
+    } catch (error) {
+      this.log.error('Error authenticating:', error);
       return Promise.resolve();
     }
 
@@ -81,18 +96,19 @@ export class MiHomeGatewayPlatform implements DynamicPlatformPlugin {
         const existingAccessory = this.accessories.find(accessory => accessory.UUID === uuid);
 
         if (existingAccessory) {
-          this.log.debug('Found existing accessory:', device.label);
+          // the accessory already exists
+          this.log.info('Restoring existing accessory from cache:', device.label);
 
-          if (this.isNullOrEmpty(existingAccessory.context.device)) {
-            this.log.debug('Device context was null, restoring');
-
-            existingAccessory.context.device = device;
-          }
-
+          existingAccessory.context.device = device;
           this.api.updatePlatformAccessories([existingAccessory]);
 
+          // create the accessory handler for the restored accessory
+          // this is imported from `platformAccessory.ts`
+          this.newPlatformAccessory(existingAccessory);
+        
         } else {
-          this.log.debug('Registering new accessory:', device.label);
+          // the accessory does not yet exist, so we need to create it
+          this.log.info('Adding new accessory:', device.label);
 
           // create a new accessory
           const accessory = new this.api.platformAccessory(device.label, uuid);
@@ -101,15 +117,11 @@ export class MiHomeGatewayPlatform implements DynamicPlatformPlugin {
           // the `context` property can be used to store any data about the accessory you may need
           accessory.context.device = device;
 
-          const platformAccessory = this.createAccessoryHandler(accessory);
+          // create the accessory handler for the newly create accessory
+          this.newPlatformAccessory(accessory);
 
-          if (platformAccessory !== null) {
-            // link the accessory to your platform
-            this.api.registerPlatformAccessories(PLUGIN_NAME, PLATFORM_NAME, [accessory]);
-
-            // push into accessory cache
-            this.accessories.push(accessory);
-          }
+          // link the accessory to your platform
+          this.api.registerPlatformAccessories(PLUGIN_NAME, PLATFORM_NAME, [accessory]);
         }
       }
     } catch (err) {
@@ -117,36 +129,20 @@ export class MiHomeGatewayPlatform implements DynamicPlatformPlugin {
     }
   }
 
-  private createAccessoryHandler(accessory: PlatformAccessory): MiHomePlatformAccessory | null {
-    const device: SubDevice = accessory.context.device;
-
-    if (this.isNullOrEmpty(device)) {
-      this.log.warn('Device context is null, unable to create accessory');
-      return null;
-    }
-
-    try {
-      switch (device.device_type) {
-        case DeviceType.CONTROL:
-        case DeviceType.LEGACY:
-        case DeviceType.LIGHT:
-        case DeviceType.RELAY:
-          return new SwitchAccessory(this, accessory);
-        default:
-          this.log.warn('Accessory type not supported: %s [%s]', device.label, device.device_type);
-          return null;
-      }
-    } catch (err) {
-      this.log.error('Error creating accessory handler', err);
-      return null;
-    }
-  }
-
   /**
-   * Check if object is null, empty, or undefined.
-   * @param obj Object.
+   * create the accessory handler for the newly create accessory
+   * @param accessory Platform accessory.
    */
-  private isNullOrEmpty<T>(obj: T): boolean {
-    return obj === null || obj === undefined || Object.keys(obj).length === 0;
+  protected newPlatformAccessory(accessory: PlatformAccessory) {
+    switch (accessory.context.device_type) {
+      case DeviceType.CONTROL:
+      case DeviceType.LEGACY:
+      case DeviceType.LIGHT:
+      case DeviceType.RELAY:
+        new SwitchAccessory(this, accessory);
+        break;
+      default:
+        this.log.warn('Device type not supported:', accessory.context.label, accessory.context.device_type);
+    }
   }
 }
