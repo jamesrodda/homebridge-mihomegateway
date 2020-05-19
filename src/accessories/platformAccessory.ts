@@ -1,6 +1,6 @@
 import type { PlatformAccessory } from 'homebridge';
 
-import { MiHomeGateway } from './platform';
+import { MiHomeGatewayPlatform } from '../platform';
 
 /**
  * Platform Accessory
@@ -10,7 +10,7 @@ import { MiHomeGateway } from './platform';
 export abstract class MiHomePlatformAccessory {
 
   constructor(
-    protected readonly platform: MiHomeGateway,
+    protected readonly platform: MiHomeGatewayPlatform,
     protected readonly accessory: PlatformAccessory,
   ) {
     // TODO

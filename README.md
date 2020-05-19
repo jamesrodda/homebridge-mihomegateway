@@ -1,4 +1,9 @@
-# homebridge-mihomegateway
+<p align="center">
+  <img src="branding/mihome-logo.png" width="100">
+  <img src="https://github.com/homebridge/branding/raw/master/logos/homebridge-wordmark-logo-vertical.png" width="150">
+</p>
+
+# MiHome Gateway Platform Plugin
 
 [![verified-by-homebridge](https://badgen.net/badge/homebridge/verified/purple)](https://github.com/homebridge/homebridge/wiki/Verified-Plugins)
 

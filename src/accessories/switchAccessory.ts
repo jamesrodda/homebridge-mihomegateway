@@ -1,4 +1,4 @@
-import { MiHomeGateway } from './platform';
+import { MiHomeGatewayPlatform } from '../platform';
 import {
   PlatformAccessory,
   CharacteristicEventTypes,
@@ -18,7 +18,7 @@ export class SwitchAccessory extends MiHomePlatformAccessory {
   private service: Service;
 
   constructor(
-    platform: MiHomeGateway,
+    platform: MiHomeGatewayPlatform,
     accessory: PlatformAccessory,
   ) {
 
