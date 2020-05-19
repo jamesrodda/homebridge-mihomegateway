@@ -32,7 +32,7 @@ export class MiHomeGatewayPlatform implements DynamicPlatformPlugin {
       this.log.error('Username not set.');
     }
 
-    if (!this.config.password && !this.config.token) {
+    if (!this.config.password) {
       if (this.config.token) {
         this.config.password = this.config.token;
       } else {
