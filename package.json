@@ -19,7 +19,7 @@
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
   "scripts": {
-    "lint": "eslint src/**",
+    "lint": "eslint src/**/*.ts",
     "watch": "npm run build && npm link && nodemon",
     "debug": "nodemon -e ts --exec 'node --inspect=5858 && tsc && homebridge -I -D'",
     "build": "rimraf ./dist && tsc",

@@ -1,3 +1,22 @@
 export interface PluginConfig {
-    baseUrl: string;
+
+  /**
+   * Username
+   */
+  username: string;
+
+  /**
+   * Password.
+   */
+  password: string;
+
+  /**
+   * Token.
+   */
+  token?: string;
+
+  /**
+   * Base URL.
+   */
+  baseUrl?: string;
 }
