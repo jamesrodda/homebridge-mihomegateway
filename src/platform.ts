@@ -134,7 +134,7 @@ export class MiHomeGatewayPlatform implements DynamicPlatformPlugin {
    * @param accessory Platform accessory.
    */
   protected newPlatformAccessory(accessory: PlatformAccessory) {
-    switch (accessory.context.device_type) {
+    switch (accessory.context.device.device_type) {
       case DeviceType.CONTROL:
       case DeviceType.LEGACY:
       case DeviceType.LIGHT:
