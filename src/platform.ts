@@ -142,7 +142,7 @@ export class MiHomeGatewayPlatform implements DynamicPlatformPlugin {
         new SwitchAccessory(this, accessory);
         break;
       default:
-        this.log.warn('Device type not supported:', accessory.context.label, accessory.context.device_type);
+        this.log.warn('Device type not supported:', accessory.context.device.label, accessory.context.device.device_type);
     }
   }
 }
