@@ -6,6 +6,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [2.1.0] - 2020-05-19
+### Fixed
+- Refactor platform (thanks to [@EpicKris](https://github.com/EpicKris)!)
+
 ## [2.0.3] - 2020-05-13
 ### Fixed
 - Markdown typo in changelog
