@@ -52,13 +52,14 @@ export class SwitchAccessory extends MiHomePlatformAccessory {
     // If the switch is toggled phsyically or via another route, i.e. Alexa, the new
     // value is not reported by the API. Investigations ongoing to find a solution.
     try {
-      const device = await this.platform.EnergenieApi.getSubdeviceInfo(this.accessory.context.device.id);
-      const isOn = device.power_state === 1;
+      const device = await this.getDevice();
 
-      // push the new value to HomeKit
-      this.service.updateCharacteristic(this.platform.Characteristic.On, isOn);
+      if (device) {
+        const isOn = device.power_state === 1;
 
-      this.platform.log.debug('Pushed updated current On state to HomeKit:', isOn);
+        // push the new value to HomeKit
+        this.service.updateCharacteristic(this.platform.Characteristic.On, isOn);
+      }
     } catch (err) {
       this.platform.log.error('Error pushing updated current On state to HomeKit:', err);
     }

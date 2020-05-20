@@ -24,6 +24,29 @@ export abstract class MiHomePlatformAccessory {
   }
 
   /**
+   * Handle the "GET" requests from HomeKit
+   * These are sent when HomeKit wants to know the current state of the accessory.
+   */
+  async getName(callback: CharacteristicGetCallback) {
+
+    try {
+      const device = await this.getDevice();
+      let name = this.accessory.context.device.label;
+
+      if (device) {
+        name = device.label;
+      }
+
+      this.platform.log.debug('Get Characteristic Name ->', name);
+
+      callback(null, name);
+    } catch (err) {
+      this.platform.log.error('Error getting Characteristic Name ->', err);
+      callback(err);
+    }
+  }
+
+  /**
    * Handle "SET" requests from HomeKit
    * These are sent when the user changes the state of an accessory, for example, turning on a Switch.
    */
@@ -55,15 +78,33 @@ export abstract class MiHomePlatformAccessory {
   async getOn(callback: CharacteristicGetCallback) {
 
     try {
-      const device = await this.platform.EnergenieApi.getSubdeviceInfo(this.accessory.context.device.id);
-      const isOn = device.power_state === 1;
+      const device = await this.getDevice();
 
-      this.platform.log.debug('Get Characteristic On ->', isOn);
+      if (device) {
+        const isOn = device.power_state === 1;
 
-      callback(null, isOn);
+        this.platform.log.debug('Get Characteristic On ->', isOn);
+
+        callback(null, isOn);
+      } else {
+        callback(new Error('Error getting Characteristic On.'));
+      }
     } catch (err) {
       this.platform.log.error('Error getting Characteristic On ->', err);
       callback(err);
+    }
+  }
+
+  /**
+   * Get device.
+   */
+  protected async getDevice() {
+    try {
+      const device = await this.platform.EnergenieApi.getSubdeviceInfo(this.accessory.context.device.id);
+      this.accessory.context.device = device;
+      return device;
+    } catch (err) {
+      this.platform.log.error('Error getting subdevice information', this.accessory.context.device.label, err);
     }
   }
 
