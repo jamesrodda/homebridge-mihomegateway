@@ -6,6 +6,7 @@ import { Logger } from 'homebridge';
 import { EnergenieAuthenticationHandler } from './energenieAuthenticationHandler';
 import { BasicCredentialHandler } from 'typed-rest-client/Handlers';
 import { IHttpClientResponse } from 'typed-rest-client/Interfaces';
+import { getUrl } from 'typed-rest-client/Util';
 import { UnauthorisedError } from './errors';
 
 export class EnergenieApi {
@@ -53,14 +54,14 @@ export class EnergenieApi {
   public toggleSocketPower(id: number, action: string): Promise<void> {
     const params = `params={ "id": ${id} }`;
 
-    return this.makeHttpRequest(() => this.httpClient.post(`${this.baseUrl}subdevices/` + action, params),
+    return this.makeHttpRequest(() => this.httpClient.post(`${getUrl('subdevices', this.baseUrl)}` + action, params),
       `toggleSocketPower/${action}`);
   }
 
   public getSubdeviceInfo(id: number): Promise<SubDevice> {
     const params = `params={ "id": ${id} }`;
 
-    return this.makeHttpRequest(() => this.httpClient.post(`${this.baseUrl}subdevices/show`, params),
+    return this.makeHttpRequest(() => this.httpClient.post(`${getUrl('subdevices/show', this.baseUrl)}`, params),
       'getSubDeviceInfo');
   }
 
