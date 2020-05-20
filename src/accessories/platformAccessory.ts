@@ -54,9 +54,6 @@ export abstract class MiHomePlatformAccessory {
    */
   async getOn(callback: CharacteristicGetCallback) {
 
-    // The Energenie API doesn't actually return an accurate value for power_state.
-    // If the switch is toggled phsyically or via another route, i.e. Alexa, the new
-    // value is not reported by the API. Investigations ongoing to find a solution.
     try {
       const device = await this.platform.EnergenieApi.getSubdeviceInfo(this.accessory.context.device.id);
       const isOn = device.power_state === 1;
