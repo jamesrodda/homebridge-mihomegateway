@@ -35,13 +35,7 @@ export class SwitchAccessory extends MiHomePlatformAccessory {
     //
     // Here we update the state.
     setInterval(() => {
-      // assign the current brightness a random value between 0 and 100
-      const currentBrightness = Math.floor(Math.random() * 100);
-
-      // push the new value to HomeKit
-      this.service.updateCharacteristic(this.platform.Characteristic.Brightness, currentBrightness);
-
-      this.platform.log.debug('Pushed updated current Brightness state to HomeKit:', currentBrightness);
+      this.updateOn();
     }, UPDATE_STATE_INTERVAL);
   }
 
