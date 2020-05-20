@@ -1,21 +1,11 @@
 import { MiHomeGatewayPlatform } from '../platform';
-import {
-  PlatformAccessory,
-  CharacteristicEventTypes,
-  CharacteristicValue,
-  CharacteristicSetCallback,
-  CharacteristicGetCallback,
-  Service,
-} from 'homebridge';
+import { Service, PlatformAccessory, CharacteristicEventTypes } from 'homebridge';
+
+import { UPDATE_STATE_INTERVAL } from '../settings';
 import { MiHomePlatformAccessory } from './platformAccessory';
 
 export class SwitchAccessory extends MiHomePlatformAccessory {
-
-  private states = {
-    On: false,
-  };
-
-  private service: Service;
+  protected service: Service;
 
   constructor(
     platform: MiHomeGatewayPlatform,
@@ -23,11 +13,6 @@ export class SwitchAccessory extends MiHomePlatformAccessory {
   ) {
 
     super(platform, accessory);
-
-    // set accessory information
-    this.accessory.getService(this.platform.Service.AccessoryInformation)!
-      .setCharacteristic(this.platform.Characteristic.Manufacturer, 'Energenie')
-      .setCharacteristic(this.platform.Characteristic.Model, accessory.context);
 
     // get the Switch service if it exists, otherwise create a new Switch service
     // you can create multiple services for each accessory
@@ -38,62 +23,45 @@ export class SwitchAccessory extends MiHomePlatformAccessory {
     this.service.setCharacteristic(this.platform.Characteristic.Name, accessory.context.device.label);
 
     // each service must implement at-minimum the "required characteristics" for the given service type
-    // see https://github.com/homebridge/HAP-NodeJS/blob/master/src/lib/gen/HomeKit.ts
+    // see https://developers.homebridge.io/#/service/Switch
 
     // register handlers for the On/Off Characteristic
     this.service.getCharacteristic(this.platform.Characteristic.On)
-      .on(CharacteristicEventTypes.SET, this.setOn.bind(this))                // SET - bind to the `setOn` method below
-      .on(CharacteristicEventTypes.GET, this.getOn.bind(this));               // GET - bind to the `getOn` method below
+      .on(CharacteristicEventTypes.SET, this.setOn.bind(this))  // SET - bind to the `setOn` method below
+      .on(CharacteristicEventTypes.GET, this.getOn.bind(this)); // GET - bind to the `getOn` method below
+
+    // Update the state of a Characteristic asynchronously instead
+    // of using the `on('get')` handlers.
+    //
+    // Here we update the state.
+    setInterval(() => {
+      this.updateOn();
+    }, UPDATE_STATE_INTERVAL);
   }
 
   /**
-   * Handle "SET" requests from HomeKit
-   * These are sent when the user changes the state of an accessory, for example, turning on a Light bulb.
+   * Update the state of a Characteristic asynchronously instead
+   * of using the `on('get')` handlers.
+   * 
+   * Here we update the on / off state using
+   * the `updateCharacteristic` method.
    */
-  setOn(value: CharacteristicValue, callback: CharacteristicSetCallback) {
-    this.states.On = value as boolean;
-
-    this.platform.log.debug('Set Characteristic On ->', value);
-
-    const switchState = this.service.getCharacteristic(this.platform.Characteristic.On);
-
-    if (switchState.value !== value) {
-      const endpoint = this.states.On ? 'power_on' : 'power_off';
-      this.platform.log.debug('start %s', endpoint);
-
-      this.platform.EnergenieApi.toggleSocketPower(this.accessory.context.device.id, endpoint)
-        .then(() => {
-          this.platform.log.debug('%s complete', endpoint);
-          callback(null);
-        })
-        .catch(err => {
-          this.platform.log.debug('Error \'%s\' setting switch state', err);
-          callback(err || new Error('Error setting switch state.'));
-        });
-    } else {
-      callback(null);
-    }
-  }
-
-  /**
-   * Handle the "GET" requests from HomeKit
-   * These are sent when HomeKit wants to know the current state of the accessory.
-  */
-  getOn(callback: CharacteristicGetCallback) {
+  async updateOn() {
 
     // The Energenie API doesn't actually return an accurate value for power_state.
     // If the switch is toggled phsyically or via another route, i.e. Alexa, the new
     // value is not reported by the API. Investigations ongoing to find a solution.
-    this.platform.EnergenieApi.getSubdeviceInfo(this.accessory.context.device.id)
-      .then(deviceInfo => {
-        this.states.On = deviceInfo.power_state === 1;
+    try {
+      const device = await this.getDevice();
 
-        this.platform.log.debug('Get Characteristic On ->', this.states.On);
+      if (device) {
+        const isOn = device.power_state === 1;
 
-        callback(null, this.states.On);
-      })
-      .catch(err => {
-        callback(err);
-      });
+        // push the new value to HomeKit
+        this.service.updateCharacteristic(this.platform.Characteristic.On, isOn);
+      }
+    } catch (err) {
+      this.platform.log.error('Error pushing updated current On state to HomeKit:', err);
+    }
   }
 }
