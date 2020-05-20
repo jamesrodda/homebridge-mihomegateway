@@ -1,8 +1,8 @@
 <p align="center">
   <img src="branding/mihome-logo.png" width="100">
-  <span style="position: relative; top: 20px">
+  <div style="position: relative; top: 20px">
     <img src="https://github.com/homebridge/branding/raw/master/logos/homebridge-wordmark-logo-vertical.png" width="150">
-  </span>
+  </div>
 </p>
 
 # MiHome Gateway Platform Plugin
