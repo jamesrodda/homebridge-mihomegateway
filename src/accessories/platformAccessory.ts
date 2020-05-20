@@ -18,8 +18,8 @@ export abstract class MiHomePlatformAccessory {
     // set accessory information
     this.accessory.getService(this.platform.Service.AccessoryInformation)!
       .setCharacteristic(this.platform.Characteristic.Manufacturer, MANUFACTURER)
-      .setCharacteristic(this.platform.Characteristic.Model, this.accessory.context.device_type)
-      .setCharacteristic(this.platform.Characteristic.Name, this.accessory.context.label)
+      .setCharacteristic(this.platform.Characteristic.Model, this.accessory.context.device.device_type)
+      .setCharacteristic(this.platform.Characteristic.Name, this.accessory.context.device.label)
       .setCharacteristic(this.platform.Characteristic.AppMatchingIdentifier, APP_MATCHING_IDENTIFIER);
   }
 
