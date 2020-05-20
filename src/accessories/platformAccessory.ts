@@ -104,7 +104,7 @@ export abstract class MiHomePlatformAccessory {
       this.accessory.context.device = device;
       return device;
     } catch (err) {
-      this.platform.log.error('Error getting subdevice information', this.accessory.context.device.label, err);
+      this.platform.log.error('Error getting subdevice information:', this.accessory.context.device.label, err);
     }
   }
 
