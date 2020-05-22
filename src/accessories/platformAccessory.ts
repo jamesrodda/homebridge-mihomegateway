@@ -52,16 +52,14 @@ export abstract class MiHomePlatformAccessory {
    */
   async setOn(value: CharacteristicValue, callback: CharacteristicSetCallback) {
     
-    const action = value ? 'power_on' : 'power_off';
-
     try {
-      await this.platform.EnergenieApi.toggleSocketPower(this.accessory.context.device.id, action);
+      await this.platform.EnergenieApi.toggleSocketPower(this.accessory.context.device.id, value === true);
 
       this.platform.log.debug('Set Characteristic On ->', value);
 
       callback(null);
     } catch (err) {
-      this.platform.log.error('Error setting Characteristic On ->', action, err);
+      this.platform.log.error('Error setting Characteristic On ->', value, err);
       callback(err);
     }
   }
