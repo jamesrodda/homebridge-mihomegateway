@@ -53,15 +53,17 @@ export class EnergenieApi {
 
   public toggleSocketPower(id: number, action: string): Promise<void> {
     const params = `params={ "id": ${id} }`;
+    const url = getUrl('subdevices' + action, this.baseUrl);
 
-    return this.makeHttpRequest(() => this.httpClient.post(`${getUrl('subdevices', this.baseUrl)}` + action, params),
+    return this.makeHttpRequest(() => this.httpClient.post(url, params),
       `toggleSocketPower/${action}`);
   }
 
   public getSubdeviceInfo(id: number): Promise<SubDevice> {
     const params = `params={ "id": ${id} }`;
+    const url = getUrl('subdevices/show', this.baseUrl);
 
-    return this.makeHttpRequest(() => this.httpClient.post(`${getUrl('subdevices/show', this.baseUrl)}`, params),
+    return this.makeHttpRequest(() => this.httpClient.post(url, params),
       'getSubDeviceInfo');
   }
 
