@@ -5,12 +5,6 @@
   "schema": {
     "type": "object",
     "properties": {
-      "baseUrl": {
-        "title": "BaseUrl",
-        "type": "string",
-        "required": true,
-        "default": "https://mihome4u.co.uk/api/v1/"
-      },
       "username": {
         "title": "Username",
         "type": "string",
@@ -19,7 +13,18 @@
       "password": {
         "title": "Password",
         "type": "string",
-        "required": true
+        "required": false
+      },
+      "token": {
+        "title": "Token",
+        "type": "string",
+        "required": false
+      },
+      "baseUrl": {
+        "title": "API Base Url",
+        "type": "string",
+        "required": false,
+        "default": "https://mihome4u.co.uk/api/v1/"
       }
     }
   }
