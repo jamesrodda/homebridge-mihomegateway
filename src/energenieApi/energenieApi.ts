@@ -54,7 +54,7 @@ export class EnergenieApi {
   public toggleSocketPower(id: number, value: boolean): Promise<void> {
     const params = `params={ "id": ${id} }`;
     const action = value ? 'power_on' : 'power_off';
-    const url = getUrl('subdevices' + action, this.baseUrl);
+    const url = getUrl('subdevices/' + action, this.baseUrl);
 
     return this.makeHttpRequest(() => this.httpClient.post(url, params),
       `toggleSocketPower/${action}`);
