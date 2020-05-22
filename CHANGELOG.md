@@ -6,6 +6,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [2.2.1] - 2020-05-22
+### Fixed
+- Fixed concat url issue
+
 ## [2.2.0] - 2020-05-20
 ### Fixed
 - Refactor accessories (thanks again to [@EpicKris](https://github.com/EpicKris)!)
