@@ -6,6 +6,7 @@ import { Logger } from 'homebridge';
 import { EnergenieAuthenticationHandler } from './energenieAuthenticationHandler';
 import { BasicCredentialHandler } from 'typed-rest-client/Handlers';
 import { IHttpClientResponse } from 'typed-rest-client/Interfaces';
+import { getUrl } from 'typed-rest-client/Util';
 import { UnauthorisedError } from './errors';
 
 export class EnergenieApi {
@@ -50,17 +51,20 @@ export class EnergenieApi {
       'getSubDevices');
   }
 
-  public toggleSocketPower(id: number, action: string): Promise<void> {
+  public toggleSocketPower(id: number, value: boolean): Promise<void> {
     const params = `params={ "id": ${id} }`;
+    const action = value ? 'power_on' : 'power_off';
+    const url = getUrl('subdevices/' + action, this.baseUrl);
 
-    return this.makeHttpRequest(() => this.httpClient.post(`${this.baseUrl}subdevices/` + action, params),
+    return this.makeHttpRequest(() => this.httpClient.post(url, params),
       `toggleSocketPower/${action}`);
   }
 
   public getSubdeviceInfo(id: number): Promise<SubDevice> {
     const params = `params={ "id": ${id} }`;
+    const url = getUrl('subdevices/show', this.baseUrl);
 
-    return this.makeHttpRequest(() => this.httpClient.post(`${this.baseUrl}subdevices/show`, params),
+    return this.makeHttpRequest(() => this.httpClient.post(url, params),
       'getSubDeviceInfo');
   }
 
