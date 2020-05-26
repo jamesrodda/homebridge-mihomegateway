@@ -112,7 +112,7 @@ export class MiHomeGatewayPlatform implements DynamicPlatformPlugin {
           // create the accessory handler for the restored accessory
           // this is imported from `platformAccessory.ts`
           this.newPlatformAccessory(existingAccessory);
-        
+
         } else {
           // the accessory does not yet exist, so we need to create it
           this.log.info('Adding new accessory:', device.label);
@@ -146,6 +146,7 @@ export class MiHomeGatewayPlatform implements DynamicPlatformPlugin {
       case DeviceType.LEGACY:
       case DeviceType.LIGHT:
       case DeviceType.RELAY:
+      case DeviceType.SOCKET:
         new SwitchAccessory(this, accessory);
         break;
       default:

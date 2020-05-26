@@ -6,6 +6,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [2.3.0] - 2020-05-26
+### Added
+- Added Token to config schema
+- Log api key on login
+- Added switch as a controllable device
+
 ## [2.2.1] - 2020-05-22
 ### Fixed
 - Fixed concat url issue
