@@ -10,7 +10,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Added
 - Added Token to config schema
 - Log api key on login
-- Added switch as a controllable device
+- Added socket as a controllable device
 
 ## [2.2.1] - 2020-05-22
 ### Fixed
