@@ -32,9 +32,11 @@ export class MiHomeGatewayPlatform implements DynamicPlatformPlugin {
       this.log.error('Username not set.');
     }
 
+    let passwordToken = this.config.password;
+
     if (!this.config.password) {
       if (this.config.token) {
-        this.config.password = this.config.token;
+        passwordToken = this.config.token;
       } else {
         this.log.error('Password or token not set.');
       }
@@ -44,7 +46,7 @@ export class MiHomeGatewayPlatform implements DynamicPlatformPlugin {
       this.config.baseUrl = MIHOME_API_BASE_URL;
     }
 
-    this.EnergenieApi = new EnergenieApi(this.log, this.config.username, this.config.password, this.config.baseUrl);
+    this.EnergenieApi = new EnergenieApi(this.log, this.config.username, passwordToken, this.config.baseUrl);
 
     // When this event is fired it means Homebridge has restored all cached accessories from disk.
     // Dynamic Platform plugins should only register new accessories after this event was fired,
@@ -52,6 +54,18 @@ export class MiHomeGatewayPlatform implements DynamicPlatformPlugin {
     // to start discovery of new accessories.
     this.api.on(APIEvent.DID_FINISH_LAUNCHING, async () => {
       log.debug('Executed didFinishLaunching callback');
+
+      try {
+        await this.EnergenieApi.auth();
+
+        if (!this.config.token) {
+          const userProfile = await this.EnergenieApi.getUserProfile();
+          this.log.info('User profile API key:', userProfile.api_key);
+        }
+      } catch (error) {
+        this.log.error('Error authenticating:', error);
+      }
+
       // run the method to discover / register your devices as accessories
       await this.discoverDevices();
     });
@@ -71,14 +85,7 @@ export class MiHomeGatewayPlatform implements DynamicPlatformPlugin {
   /**
    * Calls the Energenie API to find devices registered
    */
-  async discoverDevices(): Promise<void> {
-    
-    try {
-      await this.EnergenieApi.auth();
-    } catch (error) {
-      this.log.error('Error authenticating:', error);
-      return Promise.resolve();
-    }
+  async discoverDevices() {
 
     try {
       const devices = await this.EnergenieApi.getSubDevices();
