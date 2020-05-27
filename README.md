@@ -38,8 +38,8 @@ This will all be automated in upcoming releases but for now a bit of manual work
 - `baseUrl` - [optional] an override for the MiHome API URL
 
 ## TODO
--[] Add additional device types (currently only supports light switches)
--[] Automate registration
+- [ ] Add additional device types (currently only supports light switches)
+- [ ] Automate registration
 
 ## Credits
 - Adrian Rudman for [homebridge-platform-wemo](https://github.com/rudders/homebridge-platform-wemo) which I based this plugin on
