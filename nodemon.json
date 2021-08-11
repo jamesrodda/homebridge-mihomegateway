@@ -5,5 +5,8 @@
   "ext": "ts",
   "ignore": [],
   "exec": "tsc && homebridge -I -D",
-  "verbose": true
+  "signal": "SIGTERM",
+  "env": {
+    "NODE_OPTIONS": "--trace-warnings"
+  }
 }

@@ -1,7 +1,7 @@
 {
   "name": "homebridge-mihomegateway",
   "displayName": "Homebridge MiHome Gateway",
-  "version": "2.3.0",
+  "version": "2.4.0",
   "description": "MiHome plugin for homebridge: https://github.com/nfarina/homebridge",
   "license": "ISC",
   "author": "James Rodda <james@rodda.me> (http://rodda.me)",
@@ -13,8 +13,8 @@
     "url": "http://github.com/jamesrodda/homebridge-mihomegateway/issues"
   },
   "engines": {
-    "node": ">=10.17.0",
-    "homebridge": ">0.4.53"
+    "node": ">=12.16.3",
+    "homebridge": ">1.3.4"
   },
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
@@ -29,17 +29,17 @@
     "homebridge-plugin"
   ],
   "dependencies": {
-    "typed-rest-client": "^1.7.3"
+    "typed-rest-client": "^1.8.4"
   },
   "devDependencies": {
-    "@types/node": "^13.13.2",
-    "@typescript-eslint/eslint-plugin": "^2.29.0",
-    "@typescript-eslint/parser": "^2.29.0",
-    "eslint": "^6.8.0",
-    "homebridge": "^0.4.54-beta.54",
-    "nodemon": "^2.0.3",
+    "@types/node": "^16.4.13",
+    "@typescript-eslint/eslint-plugin": "^4.29.1",
+    "@typescript-eslint/parser": "^4.29.1",
+    "eslint": "^7.32.0",
+    "homebridge": "^1.3.4",
+    "nodemon": "^2.0.12",
     "rimraf": "^3.0.2",
-    "ts-node": "^8.9.0",
-    "typescript": "^3.8.3"
+    "ts-node": "^10.2.0",
+    "typescript": "^4.3.5"
   }
 }
